@@ -2,17 +2,31 @@
  * Created by taky2 on 2/1/16.
  */
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 
 public class Stripper {
 
     public static void main(String[] args) {
-        File file = new File("/Users/kyma/stripper.txt");
+
+        String fileName = "striptest-";
+        int fileNumber = 1;
+        String fileType = ".txt";
+
+        File file = new File(fileName+fileType);
         String fileString = fileToString(file);
 
-        System.out.println(fileString); //print final string (parsed)
+        //System.out.println(fileString); //print final string (parsed)
+        //stringToFile(fileString);
+
+        try(PrintWriter out = new PrintWriter(fileName+"_stripped_"+fileType)) {
+            out.print(fileString);
+            System.out.println("File(s) processed.");
+
+        }
+        catch (IOException ex) {
+
+        }
+
     }
 
     /***********************************************************************************
@@ -129,6 +143,15 @@ public class Stripper {
         for(int i=0; i < strBldr.length(); i++){
             char currentC = strBldr.charAt(i);
 
+            /** Check first line **/
+            if ( (i == 0 ) && (currentC=='\n' || currentC=='\r') ) {
+                strBldr.deleteCharAt(i);
+            }
+            /** Check last line **/
+            if ( ( i == strBldr.length()-1 ) && (currentC=='\n' || currentC=='\r') ) {
+                strBldr.deleteCharAt(i);
+            }
+            /** Final check for empty blank lines **/
             if ( i > 0 ) {
 
                 char previousC = strBldr.charAt(i-1);
@@ -136,7 +159,6 @@ public class Stripper {
                 if ( (currentC=='\n' || currentC=='\r') && (previousC=='\n' || previousC=='\r') ) {
                     strBldr.deleteCharAt(i);
                 }
-
             }
         }
 
@@ -144,6 +166,30 @@ public class Stripper {
         return fullString;
 
     }//end removeAllComments
+
+     private static void stringToFile(String text) {
+
+        String fileName = "stripper";
+        int fileNumber = 1;
+        String fileType = ".txt";
+
+        try(PrintWriter out = new PrintWriter(fileName+fileType)) {
+            out.print(text);
+
+        }
+        catch (IOException ex) {
+
+        }
+
+        /**
+        try(PrintStream out = new PrintStream(fileName+fileType)) {
+            out.print(text);
+        } catch (IOException e) {
+
+        }
+         **/
+
+    }
 
 }//end Stripper
 
