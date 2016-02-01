@@ -12,12 +12,26 @@ public class Stripper {
         int fileNumber = 1;
         String fileType = ".txt";
 
-        File file = new File(fileName+fileType);
-        String fileString = fileToString(file);
+        //TODO: LOOP THROUGH FILES
+        String currentFileName = "";
 
-        //System.out.println(fileString); //print final string (parsed)
-        //stringToFile(fileString);
+        for (int i = 1; i <= 3; i++) {
 
+            currentFileName = fileName + fileNumber + fileType;
+
+            File file = new File(currentFileName);
+            String fileString = fileToString(file);
+
+            //System.out.println(fileString); //print final string (parsed)
+            currentFileName = fileName + fileNumber + "-processed-" + fileType;
+            stringToFile(fileString, currentFileName);
+
+            fileNumber++;
+        }
+
+        System.out.println("File(s) have been processed.");
+
+/**
         try(PrintWriter out = new PrintWriter(fileName+"_stripped_"+fileType)) {
             out.print(fileString);
             System.out.println("File(s) processed.");
@@ -26,7 +40,7 @@ public class Stripper {
         catch (IOException ex) {
 
         }
-
+**/
     }
 
     /***********************************************************************************
@@ -133,9 +147,9 @@ public class Stripper {
                 default:
                     System.out.println("Error: unknown case");
                     return null;
-            }
+            }//end switch statement
             previousChar = currentChar;
-        }
+        }//end for loop
 
         /***********************************************************************
          *  Remove extraneous blank lines leftover from comments               *
@@ -167,13 +181,9 @@ public class Stripper {
 
     }//end removeAllComments
 
-     private static void stringToFile(String text) {
+     private static void stringToFile(String text, String currentFileName) {
 
-        String fileName = "stripper";
-        int fileNumber = 1;
-        String fileType = ".txt";
-
-        try(PrintWriter out = new PrintWriter(fileName+fileType)) {
+        try(PrintWriter out = new PrintWriter(currentFileName)) {
             out.print(text);
 
         }
