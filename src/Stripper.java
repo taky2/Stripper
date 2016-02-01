@@ -9,7 +9,7 @@ import java.io.FileReader;
 public class Stripper {
 
     public static void main(String[] args) {
-        File file = new File("stripper.txt");
+        File file = new File("/Users/kyma/stripper.txt");
         String fileString = fileToString(file);
 
         System.out.println(fileString); //print final string (parsed)
@@ -52,7 +52,7 @@ public class Stripper {
 
     enum FilterState
     {
-        BODY, COMMENT, STRING, BLOCK_COMMENT, LINE_COMMENT, END_OF_COMMENT
+        TEXT_BODY, STRING, COMMENT_START, BLOCK_COMMENT, LINE_COMMENT, COMMENT_END
     }
 
     /***********************************************************************
@@ -64,7 +64,7 @@ public class Stripper {
      *  the provided string.                                               *
      ***********************************************************************/
     public static String removeAllComments(String textFile)  {
-        FilterState filterState = FilterState.BODY;
+        FilterState filterState = FilterState.TEXT_BODY;
 
         StringBuilder strBldr = new StringBuilder();
 
@@ -74,16 +74,21 @@ public class Stripper {
             char currentChar = textFile.charAt(i);
 
             switch(filterState){
-                case BODY:
+                case TEXT_BODY:
                     if(currentChar=='/')
-                        filterState = FilterState.COMMENT;
+                        filterState = FilterState.COMMENT_START;
                     else {
                         if (currentChar == '"')
                             filterState = FilterState.STRING;
                         strBldr.append(currentChar);
                     }
                     break;
-                case COMMENT:
+                case STRING:
+                    if(currentChar == '"' && previousChar!='\\')
+                        filterState = FilterState.TEXT_BODY;
+                    strBldr.append(currentChar);
+                    break;
+                case COMMENT_START:
                     if(currentChar=='*'){
                         filterState = FilterState.BLOCK_COMMENT;
                     }
@@ -91,33 +96,28 @@ public class Stripper {
                         filterState = FilterState.LINE_COMMENT;
                     }
                     else {
-                        filterState = FilterState.BODY;
+                        filterState = FilterState.TEXT_BODY;
                         strBldr.append(previousChar+currentChar);
-                    }
-                    break;
-                case LINE_COMMENT:
-                    if(currentChar=='\n' || currentChar=='\r') {
-                        filterState = FilterState.BODY;
-                        strBldr.append(currentChar);
                     }
                     break;
                 case BLOCK_COMMENT:
                     if(currentChar=='*')
-                        filterState=FilterState.END_OF_COMMENT;
+                        filterState=FilterState.COMMENT_END;
                     break;
-                case END_OF_COMMENT:
+                case LINE_COMMENT:
+                    if(currentChar=='\n' || currentChar=='\r') {
+                        filterState = FilterState.TEXT_BODY;
+                        strBldr.append(currentChar);
+                    }
+                    break;
+                case COMMENT_END:
                     if(currentChar=='/')
-                        filterState = FilterState.BODY;
+                        filterState = FilterState.TEXT_BODY;
                     else if(currentChar!='*')
                         filterState = FilterState.BLOCK_COMMENT;
                     break;
-                case STRING:
-                    if(currentChar == '"' && previousChar!='\\')
-                        filterState = FilterState.BODY;
-                    strBldr.append(currentChar);
-                    break;
                 default:
-                    System.out.println("unknown case");
+                    System.out.println("Error: unknown case");
                     return null;
             }
             previousChar = currentChar;
@@ -136,6 +136,7 @@ public class Stripper {
                 if ( (currentC=='\n' || currentC=='\r') && (previousC=='\n' || previousC=='\r') ) {
                     strBldr.deleteCharAt(i);
                 }
+
             }
         }
 
