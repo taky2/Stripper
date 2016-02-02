@@ -13,22 +13,50 @@ public class Stripper {
         String fileType = ".txt";
 
         String currentFileName = "";
+        File file;
+        String fileString;
 
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 13; i++) {
 
-            currentFileName = fileName + fileNumber + fileType;
+            if ( (i > 9) && (i <= 13) ) {
 
-            File file = new File(currentFileName);
-            String fileString = fileToString(file, currentFileName);
+                currentFileName = fileName+fileNumber+"a"+fileType;
+                file = new File(currentFileName);
+                fileString = fileToString(file, currentFileName);
+                currentFileName = fileName + fileNumber + "a" + "-processed-" + fileType;
+                stringToFile(fileString, currentFileName);
 
-            //System.out.println(fileString); //print final string (parsed)
-            currentFileName = fileName + fileNumber + "-processed-" + fileType;
-            stringToFile(fileString, currentFileName);
+                currentFileName = fileName+fileNumber+"b"+fileType;
+                file = new File(currentFileName);
+                fileString = fileToString(file, currentFileName);
+                currentFileName = fileName + fileNumber + "b" + "-processed-" + fileType;
+                stringToFile(fileString, currentFileName);
+
+                currentFileName = fileName+fileNumber+"c"+fileType;
+                file = new File(currentFileName);
+                fileString = fileToString(file, currentFileName);
+                currentFileName = fileName + fileNumber + "c" + "-processed-" + fileType;
+                stringToFile(fileString, currentFileName);
+                /**
+                currentFileName = fileName+fileNumber+"d"+fileType;
+                file = new File(currentFileName);
+                fileString = fileToString(file, currentFileName);
+                currentFileName = fileName + fileNumber + "d" + "-processed-" + fileType;
+                stringToFile(fileString, currentFileName);
+                 **/
+            } else {
+                currentFileName = fileName + fileNumber + fileType;
+                file = new File(currentFileName);
+                fileString = fileToString(file, currentFileName);
+                //System.out.println(fileString); //print final string (parsed)
+                currentFileName = fileName + fileNumber + "-processed-" + fileType;
+                stringToFile(fileString, currentFileName);
+            }
 
             fileNumber++;
         }
 
-        System.out.println("File(s) have been processed.");
+        System.out.println("\nFiles have been processed.");
 
     }
 
@@ -146,33 +174,45 @@ public class Stripper {
             previousChar = currentChar;
         }//end for loop
 
+        String fullString = strBldr.toString();
+
         /***********************************************************************
          *  Remove extraneous blank lines leftover from comments               *
          ***********************************************************************/
-        for(int i=0; i < strBldr.length(); i++){
-            char currentC = strBldr.charAt(i);
+        String finalText = "";
 
-            /** Check first line **/
-            if ( (i == 0 ) && (currentC=='\n' || currentC=='\r') ) {
-                strBldr.deleteCharAt(i);
-            }
-            /** Check last line **/
-            if ( ( i == strBldr.length()-1 ) && (currentC=='\n' || currentC=='\r') ) {
-                strBldr.deleteCharAt(i);
-            }
-            /** Final check for empty blank lines **/
-            if ( i > 1 ) {
+        //TRY-WITH-RESOURCES: closes resource after program finishes using it
+        try(BufferedReader reader = new BufferedReader(new StringReader(fullString))) {
+            StringBuilder finalBuilder = new StringBuilder();
+            String temp = reader.readLine();
 
-                char previousC = strBldr.charAt(i-1);
+            while(temp != null) {
 
-                if ( (currentC=='\n' || currentC=='\r') && (previousC=='\n' || previousC=='\r') ) {
-                    strBldr.deleteCharAt(i);
+                //Check for line with only tabs and spaces
+                if (temp.trim().length() == 0) {
+                    temp = temp.trim();
+                    //stringBuilder.append(lineFromFile);
                 }
+
+                if ( !temp.isEmpty()){
+                    finalBuilder.append(temp);
+                    finalBuilder.append(System.lineSeparator());
+
+                }
+                temp = reader.readLine();
             }
+            finalText = finalBuilder.toString();
+            //bufferedReader.close(); //not necessary because try-with-resources statement was used
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        String fullString = strBldr.toString();
-        return fullString;
+
+        //finalString = finalBldr.toString();
+
+//        return fullString;
+        return finalText;
 
     }//end removeAllComments
 

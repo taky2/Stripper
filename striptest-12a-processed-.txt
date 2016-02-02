@@ -1,0 +1,4 @@
+this is an example with multiple line comments 
+  text on the same line as the end of a block comment
+some more text to test 
+end of test
