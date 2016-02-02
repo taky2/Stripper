@@ -1,0 +1,10 @@
+/**
+ *
+ *
+ */
+
+/**
+ * Blank multi-line block comment prior to this block comment
+ **/
+
+/* no additional text outside of block comments */

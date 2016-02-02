@@ -1,0 +1,15 @@
+multiple line block comments 
+/*********************/
+parse this 
+/***and that***/
+
+/* simple single line block comment */
+
+/** 
+ * line
+ * multiple line comment
+ * line
+ * line
+ */ 
+
+finito

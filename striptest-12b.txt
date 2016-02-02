@@ -1,0 +1,5 @@
+/* This is a text file that does
+nothing but it has comments 
+*/
+/* This is a single line block comment */
+This is a line of blank text.

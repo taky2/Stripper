@@ -1,0 +1,29 @@
+/**
+ *  Author: dgalarza
+ *  Class: PPL
+ */
+
+
+
+public class Test13 {
+	
+	public static void main(String [] args) {
+	
+
+		System.out.print(“hello world!”); //prints “hello world!”
+		System.out.println(“testing”); /***********/
+//test comment
+//testing
+		
+	}
+
+	public void testMethod(){
+
+		/* testing this 
+		   to see if it works */
+		System.out.println(“Blank lines”);
+	}
+		//End of testing
+		/**                    */
+
+} //

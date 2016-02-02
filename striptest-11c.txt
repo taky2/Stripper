@@ -1,0 +1,16 @@
+wut
+am
+i
+doing
+multiple line comments
+//comment1 
+//comment 2
+plain text //comment for plain text
+plain text2 // comment for plain text
+more text
+//single line but //double comments  
+text again
+shift
+return
+just
+return // CR vs LF test on MAC

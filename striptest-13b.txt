@@ -1,0 +1,12 @@
+/* This is test 13
+
+*/
+
+// This is a line comment
+
+// Another line comment
+
+Plain text line
+	Tabbed text line  //comments after plain text
+
+/* hi */

@@ -1,0 +1,15 @@
+		tabbed white space before this               multiple single spaces before this but no new line
+
+new line char before and after but no space
+
+between
+	this
+or
+this.
+
+shift return
+here
+here
+and
+here.
+

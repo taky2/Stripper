@@ -12,15 +12,14 @@ public class Stripper {
         int fileNumber = 1;
         String fileType = ".txt";
 
-        //TODO: LOOP THROUGH FILES
         String currentFileName = "";
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 9; i++) {
 
             currentFileName = fileName + fileNumber + fileType;
 
             File file = new File(currentFileName);
-            String fileString = fileToString(file);
+            String fileString = fileToString(file, currentFileName);
 
             //System.out.println(fileString); //print final string (parsed)
             currentFileName = fileName + fileNumber + "-processed-" + fileType;
@@ -31,23 +30,13 @@ public class Stripper {
 
         System.out.println("File(s) have been processed.");
 
-/**
-        try(PrintWriter out = new PrintWriter(fileName+"_stripped_"+fileType)) {
-            out.print(fileString);
-            System.out.println("File(s) processed.");
-
-        }
-        catch (IOException ex) {
-
-        }
-**/
     }
 
     /***********************************************************************************
      *  Read text from current file, excluding empty lines, into a StringBuilder then  *
      *  send string to removeAllComments method to remove all types of comments        *
      ***********************************************************************************/
-    private static String fileToString(File file) {
+    private static String fileToString(File file, String currentFileName) {
         String textFile = "";
 
         //TRY-WITH-RESOURCES: closes resource after program finishes using it
@@ -55,17 +44,23 @@ public class Stripper {
             StringBuilder stringBuilder = new StringBuilder();
             String lineFromFile = bufferedReader.readLine();
 
-            while(lineFromFile != null) {
+                while(lineFromFile != null) {
 
-                if ( !lineFromFile.isEmpty()){
-                    stringBuilder.append(lineFromFile);
-                    stringBuilder.append(System.lineSeparator());
+                    //Check for line with only tabs and spaces
+                    if (lineFromFile.trim().length() == 0) {
+                        lineFromFile = lineFromFile.trim();
+                        //stringBuilder.append(lineFromFile);
+                    }
 
+                    if ( !lineFromFile.isEmpty()){
+                        stringBuilder.append(lineFromFile);
+                        stringBuilder.append(System.lineSeparator());
+
+                    }
+                    lineFromFile = bufferedReader.readLine();
                 }
-                lineFromFile = bufferedReader.readLine();
-            }
-            textFile = stringBuilder.toString();
-            //bufferedReader.close(); //not necessary because try-with-resources statement was used
+                textFile = stringBuilder.toString();
+                //bufferedReader.close(); //not necessary because try-with-resources statement was used
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,7 +161,7 @@ public class Stripper {
                 strBldr.deleteCharAt(i);
             }
             /** Final check for empty blank lines **/
-            if ( i > 0 ) {
+            if ( i > 1 ) {
 
                 char previousC = strBldr.charAt(i-1);
 
@@ -190,14 +185,6 @@ public class Stripper {
         catch (IOException ex) {
 
         }
-
-        /**
-        try(PrintStream out = new PrintStream(fileName+fileType)) {
-            out.print(text);
-        } catch (IOException e) {
-
-        }
-         **/
 
     }
 
