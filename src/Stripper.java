@@ -23,25 +23,25 @@ public class Stripper {
                 currentFileName = fileName+fileNumber+"a"+fileType;
                 file = new File(currentFileName);
                 fileString = fileToString(file, currentFileName);
-                currentFileName = fileName + fileNumber + "a" + "-processed-" + fileType;
+                currentFileName = fileName + fileNumber + "a" + "-processed" + fileType;
                 stringToFile(fileString, currentFileName);
 
                 currentFileName = fileName+fileNumber+"b"+fileType;
                 file = new File(currentFileName);
                 fileString = fileToString(file, currentFileName);
-                currentFileName = fileName + fileNumber + "b" + "-processed-" + fileType;
+                currentFileName = fileName + fileNumber + "b" + "-processed" + fileType;
                 stringToFile(fileString, currentFileName);
 
                 currentFileName = fileName+fileNumber+"c"+fileType;
                 file = new File(currentFileName);
                 fileString = fileToString(file, currentFileName);
-                currentFileName = fileName + fileNumber + "c" + "-processed-" + fileType;
+                currentFileName = fileName + fileNumber + "c" + "-processed" + fileType;
                 stringToFile(fileString, currentFileName);
                 /**
                 currentFileName = fileName+fileNumber+"d"+fileType;
                 file = new File(currentFileName);
                 fileString = fileToString(file, currentFileName);
-                currentFileName = fileName + fileNumber + "d" + "-processed-" + fileType;
+                currentFileName = fileName + fileNumber + "d" + "-processed" + fileType;
                 stringToFile(fileString, currentFileName);
                  **/
             } else {
@@ -49,7 +49,7 @@ public class Stripper {
                 file = new File(currentFileName);
                 fileString = fileToString(file, currentFileName);
                 //System.out.println(fileString); //print final string (parsed)
-                currentFileName = fileName + fileNumber + "-processed-" + fileType;
+                currentFileName = fileName + fileNumber + "-processed" + fileType;
                 stringToFile(fileString, currentFileName);
             }
 
@@ -61,8 +61,8 @@ public class Stripper {
     }
 
     /***********************************************************************************
-     *  Read text from current file, excluding empty lines, into a StringBuilder then  *
-     *  send string to removeAllComments method to remove all types of comments        *
+     *  Read text from current file into a StringBuilder then send string to           *
+     *  removeAllComments method to prune comments of all type.                        *
      ***********************************************************************************/
     private static String fileToString(File file, String currentFileName) {
         String textFile = "";
@@ -73,12 +73,6 @@ public class Stripper {
             String lineFromFile = bufferedReader.readLine();
 
                 while(lineFromFile != null) {
-
-                    //Check for line with only tabs and spaces
-                    if (lineFromFile.trim().length() == 0) {
-                        lineFromFile = lineFromFile.trim();
-                        //stringBuilder.append(lineFromFile);
-                    }
 
                     if ( !lineFromFile.isEmpty()){
                         stringBuilder.append(lineFromFile);
@@ -100,7 +94,6 @@ public class Stripper {
     /***********************************************************************
      *  Create enumeration of all possible states while parsing comments   *
      ***********************************************************************/
-
     enum FilterState
     {
         TEXT_BODY, STRING, COMMENT_START, BLOCK_COMMENT, LINE_COMMENT, COMMENT_END
@@ -208,10 +201,6 @@ public class Stripper {
             e.printStackTrace();
         }
 
-
-        //finalString = finalBldr.toString();
-
-//        return fullString;
         return finalText;
 
     }//end removeAllComments
@@ -225,7 +214,6 @@ public class Stripper {
         catch (IOException ex) {
 
         }
-
     }
 
 }//end Stripper

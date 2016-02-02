@@ -1,0 +1,9 @@
+public class Test13 {
+	public static void main(String [] args) {
+		System.out.print(“hello world!”); 
+		System.out.println(“testing”); 
+	}
+	public void testMethod(){
+		System.out.println(“Blank lines”);
+	}
+} 
